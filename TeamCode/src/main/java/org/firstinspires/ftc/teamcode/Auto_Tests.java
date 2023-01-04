@@ -36,7 +36,6 @@ public class Auto_Tests extends LinearOpMode {
     private int previous;
     private int state;
     private Drivetrain drivetrain;
-    private DcMotor pivot;
 
     @Override
     public void runOpMode() {
@@ -58,40 +57,26 @@ public class Auto_Tests extends LinearOpMode {
                 hardwareMap.get(DcMotorEx.class, "M3"), // top right wheel
                 hardwareMap.get(DcMotorEx.class, "M4")  // bottom right wheel
         );
+        drivetrain.resetEncoders();
         drivetrain.setPIDF(1.26, 0.126, 0, 12.6, 5.0);
 
+        previous = 0;
         state = 0;
 
         waitForStart();
 
         while (opModeIsActive()) {
+            tel.addData("state", state);
+            tel.addData("p1", drivetrain.getEncoderPosition("m1"));
+            tel.addData("p2", drivetrain.getEncoderPosition("m2"));
+            tel.addData("p3", drivetrain.getEncoderPosition("m3"));
+            tel.addData("p4", drivetrain.getEncoderPosition("m4"));
+            tel.addData("v1", drivetrain.getEncoderVelocity("m1"));
+            tel.addData("v2", drivetrain.getEncoderVelocity("m2"));
+            tel.addData("v3", drivetrain.getEncoderVelocity("m3"));
+            tel.addData("v4", drivetrain.getEncoderVelocity("m4"));
             mainFSM();
             if (state == -1) { break; }
-
-
-            if (tfod != null) {
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    tel.addData("# Objects Detected", updatedRecognitions.size());
-
-                    // step through the list of recognitions and display image position/size information for each one
-                    // Note: "Image number" refers to the randomized image orientation/number
-                    for (Recognition recognition : updatedRecognitions) {
-                        double col = (recognition.getLeft() + recognition.getRight()) / 2 ;
-                        double row = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-                        double width  = Math.abs(recognition.getRight() - recognition.getLeft()) ;
-                        double height = Math.abs(recognition.getTop()  - recognition.getBottom()) ;
-
-                        tel.addData(""," ");
-                        tel.addData("Image", "%s (%.0f%% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 );
-                        tel.addData("- Position (Row/Col)","%.0f / %.0f", row, col);
-                        tel.addData("- Size (Width/Height)","%.0f / %.0f", width, height);
-                    }
-                    tel.update();
-                }
-            }
             tel.update();
         }
     }
@@ -106,9 +91,47 @@ public class Auto_Tests extends LinearOpMode {
             case 1:
                 state = -1;
                 break;
+            case 2:
+                if (tfod != null) {
+                    // getUpdatedRecognitions() will return null if no new information is available since
+                    // the last time that call was made.
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                    if (updatedRecognitions != null) {
+                        tel.addData("# Objects Detected", updatedRecognitions.size());
+
+                        // step through the list of recognitions and display image position/size information for each one
+                        // Note: "Image number" refers to the randomized image orientation/number
+                        for (Recognition recognition : updatedRecognitions) {
+                            double col = (recognition.getLeft() + recognition.getRight()) / 2;
+                            double row = (recognition.getTop() + recognition.getBottom()) / 2;
+                            double width = Math.abs(recognition.getRight() - recognition.getLeft());
+                            double height = Math.abs(recognition.getTop() - recognition.getBottom());
+
+                            tel.addData("", " ");
+                            tel.addData("Image", "%s (%.0f%% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+                            tel.addData("- Position (Row/Col)", "%.0f / %.0f", row, col);
+                            tel.addData("- Size (Width/Height)", "%.0f / %.0f", width, height);
+
+                            // detect what type of image & decide what to do depending on this
+                        }
+                        tel.update();
+                    }
+                }
             case -2:
                 if (drivetrain.stopMotor()) {
-                    state = previous + 1;
+                    previous = state;
+                    state = -3;
+                }
+                break;
+            case -3:
+                drivetrain.runMotorDistance(1, 1000, -1000, 1000, -1000);
+                previous = state;
+                state = -4;
+                break;
+            case -4:
+                if (drivetrain.stopMotor()) {
+                    previous = state;
+                    state = -1;
                 }
                 break;
         }

@@ -123,15 +123,6 @@ public class TeleOp_Laputa extends LinearOpMode {
                 slide.setPower(0.65);
             }
 
-//            if (slideToggle) {
-//                slidePos = -4300;
-//                tel.addData("y pressed", "(to make slide go up)");
-//            }
-//            else {
-//                slidePos = 0;
-//                tel.addData("y pressed", "(to make slide return down)");
-//            }
-
 // -------- telemetry ------------------------------------------------------------------------------
             tel.addData("slidePos", slide.getCurrentPosition());
             tel.addData("SlideVelocity", slide.getVelocity());

@@ -26,14 +26,19 @@ public class Drivetrain {
         this.m2 = m2;
         this.m3 = m3;
         this.m4 = m4;
+        // going forward is NEGATIVE for m1/2, POSITIVE for m3/4
     }
 
-    // Set the target power and distance and start moving
-    public void runMotorDistance(double power, int p1, int p2, int p3, int p4) {
+    public void resetEncoders() {
         m1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         m2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         m3.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         m4.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    // Set the target power and distance and start moving
+    public void runMotorDistance(double power, int p1, int p2, int p3, int p4) {
+        resetEncoders();
 
         // PID target
         m1.setTargetPosition(p1);
@@ -50,7 +55,7 @@ public class Drivetrain {
         m1.setPower(power);
         m2.setPower(power);
         m3.setPower(power);
-        m1.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        m4.setPower(power);
     }
 
     // Check if motor reached target position then stop motor
@@ -93,11 +98,29 @@ public class Drivetrain {
         m3.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         m4.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         m4.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-
     }
 
-    // Return encoder values for selected motor
-    public int getEncoder(String motorName) {
+    // Return encoder velocity values for selected motor
+    public double getEncoderVelocity(String motorName) {
+        if (motorName.equals("m1")) {
+            return m1.getVelocity();
+        }
+        else if (motorName.equals("m2")) {
+            return m2.getVelocity();
+        }
+        else if (motorName.equals("m3")) {
+            return m3.getVelocity();
+        }
+        else if (motorName.equals("m4")) {
+            return m4.getVelocity();
+        }
+        else {
+            return 0;
+        }
+    }
+
+    // Return encoder position values for selected motor
+    public double getEncoderPosition(String motorName) {
         if (motorName.equals("m1")) {
             return m1.getCurrentPosition();
         }
@@ -126,4 +149,6 @@ public class Drivetrain {
         m4.setVelocityPIDFCoefficients(p, i, d, f);
         m4.setPositionPIDFCoefficients(pos_p);
     }
+
+//    public void runSingleMotor()
 }
