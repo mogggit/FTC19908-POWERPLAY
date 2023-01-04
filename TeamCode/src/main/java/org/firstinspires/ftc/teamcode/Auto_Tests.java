@@ -58,7 +58,8 @@ public class Auto_Tests extends LinearOpMode {
                 hardwareMap.get(DcMotorEx.class, "M4")  // bottom right wheel
         );
         drivetrain.resetEncoders();
-        drivetrain.setPIDF(1.26, 0.126, 0, 12.6, 5.0);
+        drivetrain.setTolerance(10);
+        drivetrain.setPIDF(1.26, 0.126, 0, 12.6, 6.0);
 
         previous = 0;
         state = 0;
@@ -84,7 +85,7 @@ public class Auto_Tests extends LinearOpMode {
     private void mainFSM() {
         switch (state) {
             case 0:
-                drivetrain.runMotorDistance(1, -1000, -1000, 1000, 1000);
+                drivetrain.runMotorDistance(0.4, -2535, -2535, 2535, 2535);
                 previous = state;
                 state = -2;
                 break;
@@ -124,7 +125,7 @@ public class Auto_Tests extends LinearOpMode {
                 }
                 break;
             case -3:
-                drivetrain.runMotorDistance(1, 1000, -1000, 1000, -1000);
+                drivetrain.runMotorDistance(0.4, 600, -600, 600, -600);
                 previous = state;
                 state = -4;
                 break;
