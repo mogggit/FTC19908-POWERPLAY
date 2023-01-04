@@ -127,6 +127,7 @@ public class TeleOp_Laputa extends LinearOpMode {
             tel.addData("slidePos", slide.getCurrentPosition());
             tel.addData("SlideVelocity", slide.getVelocity());
             tel.addData("slideButton", slideButton.isPressed());
+            tel.addData("m1 currentPosition", drivetrain.getEncoderPosition("m1"));
             tel.update();
 
         }
