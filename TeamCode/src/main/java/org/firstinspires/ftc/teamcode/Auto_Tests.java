@@ -44,7 +44,7 @@ public class Auto_Tests extends LinearOpMode {
 
         if (tfod != null) {
             tfod.activate();
-            tfod.setZoom(1.0, 16.0/9.0);
+            tfod.setZoom(2.5, 16.0/9.0);
         }
 
         dashboard = FtcDashboard.getInstance();
@@ -62,7 +62,7 @@ public class Auto_Tests extends LinearOpMode {
         drivetrain.setPIDF(1.26, 0.126, 0, 12.6, 6.0);
 
         previous = 0;
-        state = 0;
+        state = 2;
 
         waitForStart();
 
@@ -118,6 +118,7 @@ public class Auto_Tests extends LinearOpMode {
                         tel.update();
                     }
                 }
+                break;
             case -2:
                 if (drivetrain.stopMotor()) {
                     previous = state;
