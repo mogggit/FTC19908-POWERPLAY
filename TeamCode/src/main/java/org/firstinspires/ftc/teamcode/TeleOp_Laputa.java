@@ -19,8 +19,6 @@ public class TeleOp_Laputa extends LinearOpMode {
     private double leftPos;
     private double rightPos;
     private boolean clampToggle;
-    private int slidePos;
-    private boolean slideToggle;
     // combines dashboard telemetry and ds telemetry
     private MultipleTelemetry tel = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     private TouchSensor slideButton;
@@ -110,8 +108,7 @@ public class TeleOp_Laputa extends LinearOpMode {
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(-1);
             }
-
-            else if (gamepad2.a || gamepad1.b) {
+            else if (gamepad2.a || gamepad1.a) {
                 slide.setTargetPosition(-300);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(-1);
