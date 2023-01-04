@@ -37,7 +37,6 @@ public class Auto_Tests extends LinearOpMode {
     private int state;
     private Drivetrain drivetrain;
     private DcMotor pivot;
-    private DcMotorEx m1;
 
     @Override
     public void runOpMode() {
@@ -50,35 +49,24 @@ public class Auto_Tests extends LinearOpMode {
         }
 
         dashboard = FtcDashboard.getInstance();
-        tel = new MultipleTelemetry(telemetry, dashboard.getTelemetry());;
+        tel = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         dashboard.startCameraStream(tfod, 30);
 
-        m1 = hardwareMap.get(DcMotorEx.class, "M1");
-        m1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drivetrain = new Drivetrain(
+                hardwareMap.get(DcMotorEx.class, "M1"), // top left wheel
+                hardwareMap.get(DcMotorEx.class, "M2"), // bottom left wheel
+                hardwareMap.get(DcMotorEx.class, "M3"), // top right wheel
+                hardwareMap.get(DcMotorEx.class, "M4")  // bottom right wheel
+        );
+        drivetrain.setPIDF(1.26, 0.126, 0, 12.6, 5.0);
 
-        m1.setVelocityPIDFCoefficients(1.26, 0.126, 0, 12.6);
-        m1.setPositionPIDFCoefficients(5.0);
+        state = 0;
 
         waitForStart();
 
         while (opModeIsActive()) {
-
-
-            switch (state) {
-                case 0:
-                    drivetrain.runMotorDistance(1, -1000, -1000, 1000, 1000);
-                    previous = state;
-                    state = -2;
-                    break;
-                case 1:
-                    state = -1;
-                    break;
-                case -2:
-                    if (drivetrain.stopMotor()) {
-                        state = previous + 1;
-                    }
-                    break;
-            }
+            mainFSM();
+            if (state == -1) { break; }
 
 
             if (tfod != null) {
@@ -104,11 +92,25 @@ public class Auto_Tests extends LinearOpMode {
                     tel.update();
                 }
             }
-//            m1.setTargetPosition(2000);
-//            m1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            m1.setPower(1);
             tel.update();
-//            break;
+        }
+    }
+
+    private void mainFSM() {
+        switch (state) {
+            case 0:
+                drivetrain.runMotorDistance(1, -1000, -1000, 1000, 1000);
+                previous = state;
+                state = -2;
+                break;
+            case 1:
+                state = -1;
+                break;
+            case -2:
+                if (drivetrain.stopMotor()) {
+                    state = previous + 1;
+                }
+                break;
         }
     }
 

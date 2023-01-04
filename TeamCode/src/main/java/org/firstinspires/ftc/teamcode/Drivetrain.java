@@ -117,13 +117,13 @@ public class Drivetrain {
 
     //set PIDF coefficients for all motors
     public void setPIDF(double p, double i, double d, double f, double pos_p) {
-        m1.setVelocityPIDFCoefficients(1.16, 0.116, 0, 11.6);
-        m1.setPositionPIDFCoefficients(3);
-        m2.setVelocityPIDFCoefficients(1.16, 0.116, 0, 11.6);
-        m2.setPositionPIDFCoefficients(3);
-        m3.setVelocityPIDFCoefficients(1.16, 0.116, 0, 11.6);
-        m3.setPositionPIDFCoefficients(3);
-        m4.setVelocityPIDFCoefficients(1.16, 0.116, 0, 11.6);
-        m4.setPositionPIDFCoefficients(3);
+        m1.setVelocityPIDFCoefficients(p, i, d, f);
+        m1.setPositionPIDFCoefficients(pos_p);
+        m2.setVelocityPIDFCoefficients(p, i, d, f);
+        m2.setPositionPIDFCoefficients(pos_p);
+        m3.setVelocityPIDFCoefficients(p, i, d, f);
+        m3.setPositionPIDFCoefficients(pos_p);
+        m4.setVelocityPIDFCoefficients(p, i, d, f);
+        m4.setPositionPIDFCoefficients(pos_p);
     }
 }
