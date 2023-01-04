@@ -29,6 +29,13 @@ public class Drivetrain {
         // going forward is NEGATIVE for m1/2, POSITIVE for m3/4
     }
 
+    public void setTolerance(int tolerance) {
+        m1.setTargetPositionTolerance(tolerance);
+        m2.setTargetPositionTolerance(tolerance);
+        m3.setTargetPositionTolerance(tolerance);
+        m4.setTargetPositionTolerance(tolerance);
+    }
+
     public void resetEncoders() {
         m1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         m2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
