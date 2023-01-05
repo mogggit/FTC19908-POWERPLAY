@@ -152,6 +152,16 @@ public class Auto_Tests extends LinearOpMode {
                 }
                 break;
             case 8:
+                drivetrain.runMotorDistance(0.4, 1750, 1750, -1750, -1750);
+                previous = state;
+                state = -2;
+                break;
+            case 9:
+                drivetrain.runMotorDistance(0.4, 945, 945, 945, 945);
+                previous = state;
+                state = -2;
+                break;
+            case 10:
                 state = -1;
                 break;
             case -2:
