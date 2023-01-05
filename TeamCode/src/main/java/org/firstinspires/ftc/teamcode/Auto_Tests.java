@@ -172,9 +172,7 @@ public class Auto_Tests extends LinearOpMode {
         }
     }
 
-    /**
-     * Initialize the Vuforia localization engine.
-     */
+    // Initialize the Vuforia localization engine.
     private void initVuforia() {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -182,9 +180,7 @@ public class Auto_Tests extends LinearOpMode {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
-    /**
-     * Initialize the TensorFlow Object Detection engine.
-     */
+    // Initialize the TensorFlow Object Detection engine.
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
