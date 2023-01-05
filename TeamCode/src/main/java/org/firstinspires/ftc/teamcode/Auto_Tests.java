@@ -62,23 +62,14 @@ public class Auto_Tests extends LinearOpMode {
         drivetrain.setPIDF(1.26, 0.126, 0, 12.6, 6.0);
 
         previous = 0;
-        state = 2;
+        state = 0;
 
         waitForStart();
 
         while (opModeIsActive()) {
-            tel.addData("state", state);
-            tel.addData("p1", drivetrain.getEncoderPosition("m1"));
-            tel.addData("p2", drivetrain.getEncoderPosition("m2"));
-            tel.addData("p3", drivetrain.getEncoderPosition("m3"));
-            tel.addData("p4", drivetrain.getEncoderPosition("m4"));
-            tel.addData("v1", drivetrain.getEncoderVelocity("m1"));
-            tel.addData("v2", drivetrain.getEncoderVelocity("m2"));
-            tel.addData("v3", drivetrain.getEncoderVelocity("m3"));
-            tel.addData("v4", drivetrain.getEncoderVelocity("m4"));
+            runTelemetry();
             mainFSM();
             if (state == -1) { break; }
-            tel.update();
         }
     }
 
@@ -165,5 +156,18 @@ public class Auto_Tests extends LinearOpMode {
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+    }
+
+    private void runTelemetry() {
+        tel.addData("state", state);
+        tel.addData("p1", drivetrain.getEncoderPosition("m1"));
+        tel.addData("p2", drivetrain.getEncoderPosition("m2"));
+        tel.addData("p3", drivetrain.getEncoderPosition("m3"));
+        tel.addData("p4", drivetrain.getEncoderPosition("m4"));
+        tel.addData("v1", drivetrain.getEncoderVelocity("m1"));
+        tel.addData("v2", drivetrain.getEncoderVelocity("m2"));
+        tel.addData("v3", drivetrain.getEncoderVelocity("m3"));
+        tel.addData("v4", drivetrain.getEncoderVelocity("m4"));
+        tel.update();
     }
 }
