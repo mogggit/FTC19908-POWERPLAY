@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -36,6 +37,9 @@ public class Auto_Tests extends LinearOpMode {
     private int previous;
     private int state;
     private Drivetrain drivetrain;
+    private Servo right;
+    private Servo left;
+    private double timer;
 
     @Override
     public void runOpMode() {
@@ -59,7 +63,10 @@ public class Auto_Tests extends LinearOpMode {
         );
         drivetrain.resetEncoders();
         drivetrain.setTolerance(10);
-        drivetrain.setPIDF(1.26, 0.126, 0, 12.6, 6.0);
+//        drivetrain.setPIDF(1.26, 0.13, 0, 12.6, 7.0);
+
+        right = hardwareMap.get(Servo.class, "right");
+        left = hardwareMap.get(Servo.class, "left");
 
         previous = 0;
         state = 0;
@@ -76,14 +83,9 @@ public class Auto_Tests extends LinearOpMode {
     private void mainFSM() {
         switch (state) {
             case 0:
-                drivetrain.runMotorDistance(0.4, -2535, -2535, 2535, 2535);
-                previous = state;
-                state = -2;
-                break;
-            case 1:
-                state = -1;
-                break;
-            case 2:
+                left.setPosition(0.39);
+                right.setPosition(0.39);
+
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
@@ -109,22 +111,52 @@ public class Auto_Tests extends LinearOpMode {
                         tel.update();
                     }
                 }
+                state++;
+                break;
+            case 1:
+                drivetrain.runMotorDistance(0.4, -2435, -2435, 2435, 2435);
+                previous = state;
+                state = -2;
+                break;
+            case 2:
+                drivetrain.runMotorDistance(0.4, 600, -600, 600, -600);
+                previous = state;
+                state = -2;
+                break;
+            case 3:
+                drivetrain.runMotorDistance(0.4, 110, 110, -110, -110);
+                previous = state;
+                state = -2;
+                break;
+            case 4:
+                drivetrain.runMotorDistance(0.4, -970, -970, -970, -970);
+                previous = state;
+                state = -2;
+                break;
+            case 5:
+                drivetrain.runMotorDistance(0.4, -1730, -1730, 1730, 1730);
+                previous = state;
+                state = -2;
+                break;
+            case 6:
+                timer = getRuntime();
+                left.setPosition(0.2);
+                right.setPosition(0.55);
+                state++;
+                break;
+            case 7:
+                if (getRuntime() >= timer + 2){
+                    tel.addLine("waiting");
+                    previous = state;
+                    state++;
+                }
+                break;
+            case 8:
+                state = -1;
                 break;
             case -2:
                 if (drivetrain.stopMotor()) {
-                    previous = state;
-                    state = -3;
-                }
-                break;
-            case -3:
-                drivetrain.runMotorDistance(0.4, 600, -600, 600, -600);
-                previous = state;
-                state = -4;
-                break;
-            case -4:
-                if (drivetrain.stopMotor()) {
-                    previous = state;
-                    state = -1;
+                    state = previous + 1;
                 }
                 break;
         }
