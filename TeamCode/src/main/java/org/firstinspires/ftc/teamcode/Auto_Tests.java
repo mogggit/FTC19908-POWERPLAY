@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -19,12 +20,12 @@ import java.util.List;
 @Autonomous(name = "Auto Tests")
 public class Auto_Tests extends LinearOpMode {
 
-    private static final String TFOD_MODEL_ASSET = "PowerPlay.tflite";
+    private static final String TFOD_MODEL_ASSET = "model_20230106_163221.tflite";
     // private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
     private static final String[] LABELS = {
-            "1 Bolt",
-            "2 Bulb",
-            "3 Panel"
+            "Red",
+            "Green",
+            "Blue"
     };
     private static final String VUFORIA_KEY =
             "AW7MS5P/////AAABmbhCSjNBJkfFs+kp+0SOiHFqZSTkYVDULdxP11ncxw4EQzSyRq4EOiB4GBhwHNTrpMnzpmW6xnjHx4W9Z+wQrT7fMevji9eaAX/Zn+LQwm3VrXcZLz1qmqswkdRrEgea+8tLIfLGqlnPLTHyvFcQwI21X2nM9DPIOPgFX1H+mrJetXYSe5DcM6B1kkLMSP/Y4j6dtX4FADWxblGiTrryqV0D5r7B1OMTPMydiqbta46QVSm8CrDhP88TGZ6bvnPtlPli8PTev/CWl7qihRyh8U3I6J4CifMfNOF/fMfSIsho91WhZi3T6OB0ulsHtTxQrrVPte5SIBm7Vtstx05z4KcUnSZ4rybico/ME9juFkMO";
@@ -37,6 +38,8 @@ public class Auto_Tests extends LinearOpMode {
     private int previous;
     private int state;
     private Drivetrain drivetrain;
+    private ColorSensor colorSensor;
+
     private Servo right;
     private Servo left;
     private double timer;
@@ -48,7 +51,7 @@ public class Auto_Tests extends LinearOpMode {
 
         if (tfod != null) {
             tfod.activate();
-            tfod.setZoom(2.5, 16.0/9.0);
+            tfod.setZoom(1, 16.0/9.0);
         }
 
         dashboard = FtcDashboard.getInstance();
@@ -68,6 +71,8 @@ public class Auto_Tests extends LinearOpMode {
         right = hardwareMap.get(Servo.class, "right");
         left = hardwareMap.get(Servo.class, "left");
 
+        colorSensor = hardwareMap.colorSensor.get("color");
+
         previous = 0;
         state = 0;
 
@@ -79,6 +84,8 @@ public class Auto_Tests extends LinearOpMode {
             if (state == -1) { break; }
         }
     }
+
+    //color sensor alpha: less than 490 = red or blue line
 
     private void mainFSM() {
         switch (state) {
@@ -134,7 +141,7 @@ public class Auto_Tests extends LinearOpMode {
                 state = -2;
                 break;
             case 5:
-                drivetrain.runMotorDistance(0.4, -1730, -1730, 1730, 1730);
+                drivetrain.runMotorDistance(0.4, -1800, -1800, 1800, 1800);
                 previous = state;
                 state = -2;
                 break;
@@ -147,21 +154,31 @@ public class Auto_Tests extends LinearOpMode {
             case 7:
                 if (getRuntime() >= timer + 2){
                     tel.addLine("waiting");
-                    previous = state;
                     state++;
                 }
                 break;
             case 8:
+                drivetrain.runMotorPower(-0.2, 0.2, -0.2, 0.2);
+                if (colorSensor.alpha() >= 510) {
+                    drivetrain.runMotorPower(0, 0, 0, 0);
+                    state++;
+                }
+                break;
+            case 9:
                 drivetrain.runMotorDistance(0.4, 1750, 1750, -1750, -1750);
                 previous = state;
                 state = -2;
                 break;
-            case 9:
+            case 10:
                 drivetrain.runMotorDistance(0.4, 945, 945, 945, 945);
                 previous = state;
                 state = -2;
                 break;
-            case 10:
+            case 11:
+                state = 11;
+                tel.addLine("Hold");
+                break;
+            case 12:
                 state = -1;
                 break;
             case -2:
@@ -185,15 +202,15 @@ public class Auto_Tests extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.75f;
+        tfodParameters.minResultConfidence = 0.5f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 300;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
 
         // Use loadModelFromAsset() if the TF Model is built in as an asset by Android Studio
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-        // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+//        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
+        tfod.loadModelFromFile(TFOD_MODEL_ASSET, LABELS);
     }
 
     private void runTelemetry() {
@@ -206,6 +223,7 @@ public class Auto_Tests extends LinearOpMode {
         tel.addData("v2", drivetrain.getEncoderVelocity("m2"));
         tel.addData("v3", drivetrain.getEncoderVelocity("m3"));
         tel.addData("v4", drivetrain.getEncoderVelocity("m4"));
+        tel.addData("color alpha", colorSensor.alpha());
         tel.update();
     }
 }
