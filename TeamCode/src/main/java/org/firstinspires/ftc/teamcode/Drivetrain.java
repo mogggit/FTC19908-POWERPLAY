@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -63,6 +64,18 @@ public class Drivetrain {
         m2.setPower(power);
         m3.setPower(power);
         m4.setPower(power);
+    }
+
+    public void runMotorPower(double pow1, double pow2, double pow3, double pow4) {
+        m1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        m2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        m3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        m4.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        m1.setPower(pow1);
+        m2.setPower(pow2);
+        m3.setPower(pow3);
+        m4.setPower(pow4);
     }
 
     // Check if motor reached target position then stop motor
