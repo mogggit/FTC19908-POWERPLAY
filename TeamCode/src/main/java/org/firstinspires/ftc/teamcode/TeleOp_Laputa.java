@@ -3,6 +3,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -22,6 +23,7 @@ public class TeleOp_Laputa extends LinearOpMode {
     // combines dashboard telemetry and ds telemetry
     private MultipleTelemetry tel = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     private TouchSensor slideButton;
+    private ColorSensor colorSensor;
 
     @Override
     public void runOpMode() {
@@ -48,6 +50,7 @@ public class TeleOp_Laputa extends LinearOpMode {
 
         slideButton = hardwareMap.touchSensor.get("slidebutton"); // touch sensor for slide
         // value for the button is in reverse (pressed is released; released in pressed)
+        colorSensor = hardwareMap.colorSensor.get("color");
 
         drivetrain.driveMode();
 
@@ -128,6 +131,11 @@ public class TeleOp_Laputa extends LinearOpMode {
             tel.addData("SlideVelocity", slide.getVelocity());
             tel.addData("slideButton", slideButton.isPressed());
             tel.addData("m1 currentPosition", drivetrain.getEncoderPosition("m1"));
+            tel.addData("color argb", colorSensor.argb());
+            tel.addData("color red", colorSensor.red());
+            tel.addData("color green", colorSensor.green());
+            tel.addData("color blue", colorSensor.blue());
+            tel.addData("color alpha", colorSensor.alpha());
             tel.update();
 
         }
