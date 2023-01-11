@@ -42,6 +42,11 @@ public class Drivetrain {
         m2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         m3.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         m4.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
+        m1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        m2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        m3.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        m4.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
     // Set the target power and distance and start moving
