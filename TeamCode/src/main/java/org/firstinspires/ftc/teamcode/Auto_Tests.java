@@ -5,7 +5,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -92,41 +91,15 @@ public class Auto_Tests extends LinearOpMode {
             case 0:
                 left.setPosition(0.39);
                 right.setPosition(0.39);
-
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        tel.addData("# Objects Detected", updatedRecognitions.size());
-
-                        // step through the list of recognitions and display image position/size information for each one
-                        // Note: "Image number" refers to the randomized image orientation/number
-                        for (Recognition recognition : updatedRecognitions) {
-                            double col = (recognition.getLeft() + recognition.getRight()) / 2;
-                            double row = (recognition.getTop() + recognition.getBottom()) / 2;
-                            double width = Math.abs(recognition.getRight() - recognition.getLeft());
-                            double height = Math.abs(recognition.getTop() - recognition.getBottom());
-
-                            tel.addData("", " ");
-                            tel.addData("Image", "%s (%.0f%% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-                            tel.addData("- Position (Row/Col)", "%.0f / %.0f", row, col);
-                            tel.addData("- Size (Width/Height)", "%.0f / %.0f", width, height);
-
-                            // detect what type of image & decide what to do depending on this
-                        }
-                        tel.update();
-                    }
-                }
                 state++;
                 break;
             case 1:
-                drivetrain.runMotorDistance(0.4, -2435, -2435, 2435, 2435);
+                drivetrain.runMotorDistance(0.4, -2450, -2450, 2450, 2450);
                 previous = state;
                 state = -2;
                 break;
             case 2:
-                drivetrain.runMotorDistance(0.4, 600, -600, 600, -600);
+                drivetrain.runMotorDistance(0.4, 500, -500, 500, -500);
                 previous = state;
                 state = -2;
                 break;
@@ -141,7 +114,7 @@ public class Auto_Tests extends LinearOpMode {
                 state = -2;
                 break;
             case 5:
-                drivetrain.runMotorDistance(0.4, -1800, -1800, 1800, 1800);
+                drivetrain.runMotorDistance(0.4, -1850, -1850, 1850, 1850);
                 previous = state;
                 state = -2;
                 break;
@@ -158,10 +131,12 @@ public class Auto_Tests extends LinearOpMode {
                 }
                 break;
             case 8:
-                drivetrain.runMotorPower(-0.2, 0.2, -0.2, 0.2);
-                if (colorSensor.alpha() >= 510) {
+                if (colorSensor.alpha() < 400) {
                     drivetrain.runMotorPower(0, 0, 0, 0);
-                    state++;
+                    state = 9;
+                }
+                else {
+                    drivetrain.runMotorPower(0.2, -0.2, 0.2, -0.2);
                 }
                 break;
             case 9:
@@ -225,5 +200,39 @@ public class Auto_Tests extends LinearOpMode {
         tel.addData("v4", drivetrain.getEncoderVelocity("m4"));
         tel.addData("color alpha", colorSensor.alpha());
         tel.update();
+    }
+
+    // get label of recognition with highest confidence level (TensorFlow Object Detection)
+    private String getBestRecognition() {
+        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        double maxConf = 0;
+        String bestRecLabel = "";
+
+        if (updatedRecognitions != null) {
+            tel.addData("# Objects Detected", updatedRecognitions.size());
+
+            // step through the list of recognitions and display image position/size information for each one
+            // Note: "Image number" refers to the randomized image orientation/number
+            for (Recognition recognition : updatedRecognitions) {
+                double col = (recognition.getLeft() + recognition.getRight()) / 2;
+                double row = (recognition.getTop() + recognition.getBottom()) / 2;
+                double width = Math.abs(recognition.getRight() - recognition.getLeft());
+                double height = Math.abs(recognition.getTop() - recognition.getBottom());
+                double confidence = recognition.getConfidence() * 100;
+                String recLabel = recognition.getLabel();
+
+                tel.addData("", " ");
+                tel.addData("Image", "%s (%.0f%% Conf.)", recLabel, confidence);
+                tel.addData("- Position (Row/Col)", "%.0f / %.0f", row, col);
+                tel.addData("- Size (Width/Height)", "%.0f / %.0f", width, height);
+
+                if (confidence >= maxConf) {
+                    maxConf = confidence;
+                    bestRecLabel = recLabel;
+                }
+            }
+            tel.update();
+        }
+        return bestRecLabel;
     }
 }
