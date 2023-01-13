@@ -44,6 +44,7 @@ public class TeleOp_Laputa extends LinearOpMode {
         left = hardwareMap.get(Servo.class, "left");
 
         slide = hardwareMap.get(DcMotorEx.class, "slide");
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slide.setVelocityPIDFCoefficients(1.26, 0.13, 0, 12.6);
         slide.setPositionPIDFCoefficients(5.0);
@@ -99,42 +100,38 @@ public class TeleOp_Laputa extends LinearOpMode {
             if (gamepad2.y || gamepad1.y) {
                 slide.setTargetPosition(-4200);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-1);
+                slide.setPower(-0.3);
             }
             else if (gamepad2.x || gamepad1.x) {
                 slide.setTargetPosition(-3000);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-1);
+                slide.setPower(-0.3);
             }
             else if (gamepad2.b || gamepad1.b) {
                 slide.setTargetPosition(-1800);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-1);
+                slide.setPower(-0.3);
             }
             else if (gamepad2.a || gamepad1.a) {
                 slide.setTargetPosition(-300);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-1);
+                slide.setPower(-0.3);
             }
-            else if (!slideButton.isPressed()) {
+            else if (slideButton.isPressed()) {
                 slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 slide.setPower(0);
             }
             else {
                 slide.setTargetPosition(0);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(0.65);
+                slide.setPower(0.2);
             }
 
 // -------- telemetry ------------------------------------------------------------------------------
             tel.addData("slidePos", slide.getCurrentPosition());
-            tel.addData("SlideVelocity", slide.getVelocity());
+            tel.addData("slideVelocity", slide.getVelocity());
             tel.addData("slideButton", slideButton.isPressed());
             tel.addData("m1 currentPosition", drivetrain.getEncoderPosition("m1"));
-            tel.addData("color argb", colorSensor.argb());
-            tel.addData("color red", colorSensor.red());
-            tel.addData("color green", colorSensor.green());
-            tel.addData("color blue", colorSensor.blue());
             tel.addData("color alpha", colorSensor.alpha());
             tel.update();
 
