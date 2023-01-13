@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @Autonomous(name = "Auto Tests")
 public class Auto_Tests extends LinearOpMode {
 
-    private static final String TFOD_MODEL_ASSET = "model_20230106_163221.tflite";
+    private static final String TFOD_MODEL_ASSET = "model_20230113_102400.tflite";
     // private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
     private static final String[] LABELS = {
             "Red",
@@ -41,6 +42,9 @@ public class Auto_Tests extends LinearOpMode {
 
     private Servo right;
     private Servo left;
+
+    private DcMotorEx slide;
+
     private double timer;
 
     @Override
@@ -67,6 +71,12 @@ public class Auto_Tests extends LinearOpMode {
         drivetrain.setTolerance(10);
 //        drivetrain.setPIDF(1.26, 0.13, 0, 12.6, 7.0);
 
+        slide = hardwareMap.get(DcMotorEx.class, "slide");
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slide.setVelocityPIDFCoefficients(1.26, 0.13, 0, 12.6);
+        slide.setPositionPIDFCoefficients(5.0);
+
         right = hardwareMap.get(Servo.class, "right");
         left = hardwareMap.get(Servo.class, "left");
 
@@ -91,6 +101,9 @@ public class Auto_Tests extends LinearOpMode {
             case 0:
                 left.setPosition(0.39);
                 right.setPosition(0.39);
+                slide.setTargetPosition(-4200);
+                slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slide.setPower(-0.3);
                 state++;
                 break;
             case 1:
@@ -177,7 +190,7 @@ public class Auto_Tests extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.7f;
+        tfodParameters.minResultConfidence = 0.5f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 300;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
