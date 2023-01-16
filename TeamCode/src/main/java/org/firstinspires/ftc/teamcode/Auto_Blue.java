@@ -17,8 +17,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-@Autonomous(name = "Auto Tests")
-public class Auto_Tests extends LinearOpMode {
+@Autonomous(name = "Auto Blue")
+public class Auto_Blue extends LinearOpMode {
 
     private static final String TFOD_MODEL_ASSET = "model_20230113_102400.tflite";
     // private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
@@ -99,11 +99,12 @@ public class Auto_Tests extends LinearOpMode {
     private void mainFSM() {
         switch (state) {
             case 0:
-                left.setPosition(0.39);
-                right.setPosition(0.39);
+                left.setPosition(0.2);
+                right.setPosition(0.55);
+                slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 slide.setTargetPosition(-4200);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.3);
+                slide.setPower(-0.4);
                 state++;
                 break;
             case 1:
@@ -128,6 +129,9 @@ public class Auto_Tests extends LinearOpMode {
                 break;
             case 5:
                 drivetrain.runMotorDistance(0.4, -1850, -1850, 1850, 1850);
+                slide.setTargetPosition(-1000);
+                slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slide.setPower(0.3);
                 previous = state;
                 state = -2;
                 break;
