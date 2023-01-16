@@ -47,7 +47,7 @@ public class TeleOp_Laputa extends LinearOpMode {
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slide.setVelocityPIDFCoefficients(1.26, 0.13, 0, 12.6);
-        slide.setPositionPIDFCoefficients(5.0);
+        slide.setPositionPIDFCoefficients(10.0);
 
         slideButton = hardwareMap.touchSensor.get("slidebutton"); // touch sensor for slide
         // value for the button is in reverse (pressed is released; released in pressed)
@@ -100,22 +100,22 @@ public class TeleOp_Laputa extends LinearOpMode {
             if (gamepad2.y || gamepad1.y) {
                 slide.setTargetPosition(-4200);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.3);
+                slide.setPower(-0.8);
             }
             else if (gamepad2.x || gamepad1.x) {
                 slide.setTargetPosition(-3000);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.3);
+                slide.setPower(-0.8);
             }
             else if (gamepad2.b || gamepad1.b) {
                 slide.setTargetPosition(-1800);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.3);
+                slide.setPower(-0.8);
             }
             else if (gamepad2.a || gamepad1.a) {
                 slide.setTargetPosition(-300);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.3);
+                slide.setPower(-0.8);
             }
             else if (slideButton.isPressed()) {
                 slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -124,7 +124,7 @@ public class TeleOp_Laputa extends LinearOpMode {
             else {
                 slide.setTargetPosition(0);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(0.2);
+                slide.setPower(0.4);
             }
 
 // -------- telemetry ------------------------------------------------------------------------------
