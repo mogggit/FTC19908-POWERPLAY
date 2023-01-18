@@ -47,7 +47,7 @@ public class TeleOp_Laputa extends LinearOpMode {
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slide.setVelocityPIDFCoefficients(1.26, 0.13, 0, 12.6);
-        slide.setPositionPIDFCoefficients(10.0);
+        slide.setPositionPIDFCoefficients(13.0);
 
         slideButton = hardwareMap.touchSensor.get("slidebutton"); // touch sensor for slide
         // value for the button is in reverse (pressed is released; released in pressed)
@@ -124,7 +124,7 @@ public class TeleOp_Laputa extends LinearOpMode {
             else {
                 slide.setTargetPosition(0);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(0.4);
+                slide.setPower(0.8);
             }
 
 // -------- telemetry ------------------------------------------------------------------------------
