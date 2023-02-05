@@ -55,10 +55,11 @@ public class TeleOp_Laputa extends LinearOpMode {
 
         drivetrain.driveMode();
 
+        //facing the same way as robot
         //right: increase = close
         //left: decrease = close
-        rightPos = 0.39;
-        leftPos = 0.39;
+        rightPos = 0.45;
+        leftPos = 0.42;
         clampToggle = false;
 
         // slide: -4354 at max
@@ -85,12 +86,13 @@ public class TeleOp_Laputa extends LinearOpMode {
             }
 
             if (clampToggle) {
-                rightPos = 0.55;
-                leftPos = 0.2;
+                rightPos = 0.58;
+                leftPos = 0.3;
+                //0.17
             }
             else {
-                rightPos = 0.39;
-                leftPos = 0.39;
+                rightPos = 0.45;
+                leftPos = 0.42;
             }
 
             left.setPosition(leftPos);
@@ -98,24 +100,24 @@ public class TeleOp_Laputa extends LinearOpMode {
 
 // -------- hold to lift slide ---------------------------------------------------------------------
             if (gamepad2.y || gamepad1.y) {
-                slide.setTargetPosition(-4200);
+                slide.setTargetPosition(-4000);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.8);
+                slide.setPower(-1);
             }
             else if (gamepad2.x || gamepad1.x) {
                 slide.setTargetPosition(-3000);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.8);
+                slide.setPower(-1);
             }
             else if (gamepad2.b || gamepad1.b) {
                 slide.setTargetPosition(-1800);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.8);
+                slide.setPower(-1);
             }
             else if (gamepad2.a || gamepad1.a) {
                 slide.setTargetPosition(-300);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.8);
+                slide.setPower(-1);
             }
             else if (slideButton.isPressed()) {
                 slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -124,7 +126,7 @@ public class TeleOp_Laputa extends LinearOpMode {
             else {
                 slide.setTargetPosition(0);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(0.8);
+                slide.setPower(1);
             }
 
 // -------- telemetry ------------------------------------------------------------------------------
