@@ -71,7 +71,6 @@ public class Auto_Blue extends LinearOpMode {
         );
         drivetrain.resetEncoders();
         drivetrain.setTolerance(5);
-        drivetrain.setPIDF(1.26, 0.13, 0, 12.6, 7.0); // NOT TESTED YET
 
         slide = hardwareMap.get(DcMotorEx.class, "slide");
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -115,7 +114,7 @@ public class Auto_Blue extends LinearOpMode {
                 slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 slide.setTargetPosition(-3900);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.7);
+                slide.setPower(-1);
                 // probably detect the signal sleeve color here too. like this:
                 //color = getBestRecognition();
                 // but since the machine learning is broken let's just set it to this for now:
@@ -130,7 +129,7 @@ public class Auto_Blue extends LinearOpMode {
                 break;
             case 3:
                 // go left
-                drivetrain.runMotorDistance(0.4, 650, -650, 650, -650);
+                drivetrain.runMotorDistance(0.4, 620, -620, 620, -620);
                 previous = state;
                 state = -2;
                 break;
@@ -150,7 +149,7 @@ public class Auto_Blue extends LinearOpMode {
                 break;
             case 6:
                 // go backward
-                drivetrain.runMotorDistance(0.4, 250, 250, -250, -250);
+                drivetrain.runMotorDistance(0.4, 280, 280, -280, -280);
                 previous = state;
                 state = -2;
                 break;
@@ -162,10 +161,10 @@ public class Auto_Blue extends LinearOpMode {
                 break;
             case 8:
                 // go forward & run into wall; slide goes down a little
-                drivetrain.runMotorDistance(0.4, -2000, -2000, 2000, 2000);
+                drivetrain.runMotorDistance(0.6, -2000, -2000, 2000, 2000);
                 slide.setTargetPosition(-500);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(0.6);
+                slide.setPower(1);
                 previous = state;
                 state = -2;
                 break;
@@ -187,7 +186,7 @@ public class Auto_Blue extends LinearOpMode {
                 // go left until color sensor sees blue line; slide goes back up
                 slide.setTargetPosition(-3900);
                 slide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                slide.setPower(-0.8);
+                slide.setPower(-1);
                 if (colorSensor.alpha() < 400) {
                     drivetrain.runMotorPower(0, 0, 0, 0);
                     state = 12;
@@ -198,7 +197,7 @@ public class Auto_Blue extends LinearOpMode {
                 break;
             case 12:
                 // go backward
-                drivetrain.runMotorDistance(0.4, 1800, 1800, -1800, -1800);
+                drivetrain.runMotorDistance(0.6, 1800, 1800, -1800, -1800);
                 previous = state;
                 state = -2;
                 break;
@@ -265,9 +264,11 @@ public class Auto_Blue extends LinearOpMode {
                 state = -4;
                 break;
             case 21:
+                left.setPosition(0.2);
+                right.setPosition(0.55);
                 slide.setTargetPosition(0);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slide.setPower(0.6);
+                slide.setPower(1);
                 state = 21;
                 tel.addLine("Hold");
                 break;
