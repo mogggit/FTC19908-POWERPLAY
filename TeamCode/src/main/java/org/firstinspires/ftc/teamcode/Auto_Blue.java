@@ -71,6 +71,7 @@ public class Auto_Blue extends LinearOpMode {
         );
         drivetrain.resetEncoders();
         drivetrain.setTolerance(5);
+//        drivetrain.setPIDF(1.26, 0.13, 0, 12.6, 10.0); // NOT TESTED YET
 
         slide = hardwareMap.get(DcMotorEx.class, "slide");
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -129,7 +130,7 @@ public class Auto_Blue extends LinearOpMode {
                 break;
             case 3:
                 // go left
-                drivetrain.runMotorDistance(0.4, 620, -620, 620, -620);
+                drivetrain.runMotorDistance(0.4, 655, -655, 655, -655);
                 previous = state;
                 state = -2;
                 break;
@@ -283,8 +284,8 @@ public class Auto_Blue extends LinearOpMode {
                 }
                 break;
             case -3:
-                // wait for 2 seconds while clamp operates
-                if (getRuntime() >= timer + 2){
+                // wait for 1.5 seconds while clamp operates
+                if (getRuntime() >= timer + 1.5){
                     tel.addLine("waiting");
                     state = previous + 1;
                 }
