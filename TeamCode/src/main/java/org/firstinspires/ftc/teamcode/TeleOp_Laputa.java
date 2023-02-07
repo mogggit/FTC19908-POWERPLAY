@@ -86,8 +86,8 @@ public class TeleOp_Laputa extends LinearOpMode {
             }
 
             if (clampToggle) {
-                rightPos = 0.58;
-                leftPos = 0.3;
+                rightPos = 0.6;
+                leftPos = 0.28;
                 //0.17
             }
             else {
