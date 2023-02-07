@@ -116,13 +116,13 @@ public class Drivetrain {
         m3.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         m4.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         m1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        m1.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        m1.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         m2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        m2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        m2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         m3.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        m3.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        m3.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         m4.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        m4.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        m4.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
     // Return encoder velocity values for selected motor
