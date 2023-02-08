@@ -246,8 +246,9 @@ public class Auto_Red extends LinearOpMode {
                 }
                 break;
             case 18:
-                // signal zone 1 -- go right
-                drivetrain.runMotorDistance(0.4, -600, 600, -600, 600);
+                // signal zone 1 -- go VERY left
+                // (the zone goes all the way to the wall so more is better)
+                drivetrain.runMotorDistance(0.4, 1500, -1500, 1500, -1500);
                 previous = state;
                 state = -4;
                 break;
@@ -258,9 +259,8 @@ public class Auto_Red extends LinearOpMode {
                 state = -4;
                 break;
             case 20:
-                // signal zone 3 -- go VERY left
-                // (the zone goes all the way to the wall so more is better)
-                drivetrain.runMotorDistance(0.4, 1500, -1500, 1500, -1500);
+                // signal zone 3 -- go right
+                drivetrain.runMotorDistance(0.4, -600, 600, -600, 600);
                 previous = state;
                 state = -4;
                 break;

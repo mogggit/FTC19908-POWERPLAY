@@ -158,10 +158,6 @@ public class Auto_Red_tag extends LinearOpMode
                 slide.setTargetPosition(-3900);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(-0.7);
-                // probably detect the signal sleeve color here too. like this:
-                //color = getBestRecognition();
-                // but since the machine learning is broken let's just set it to this for now:
-                color = "Green";
                 state++;
                 break;
             case 2:
@@ -271,7 +267,7 @@ public class Auto_Red_tag extends LinearOpMode
                 state = -2;
                 break;
             case 17:
-                // determine which signal zone to go to based on color detected
+                // determine which signal zone to go to based on tag detected
                 if (tagOfInterest == null || tagOfInterest.id == LEFT) {
                     state = 18;
                 }
@@ -283,8 +279,9 @@ public class Auto_Red_tag extends LinearOpMode
                 }
                 break;
             case 18:
-                // signal zone 1 -- go right
-                drivetrain.runMotorDistance(0.4, -600, 600, -600, 600);
+                // signal zone 1 -- go VERY left
+                // (the zone goes all the way to the wall so more is better)
+                drivetrain.runMotorDistance(0.4, 1500, -1500, 1500, -1500);
                 previous = state;
                 state = -4;
                 break;
@@ -295,9 +292,8 @@ public class Auto_Red_tag extends LinearOpMode
                 state = -4;
                 break;
             case 20:
-                // signal zone 3 -- go VERY left
-                // (the zone goes all the way to the wall so more is better)
-                drivetrain.runMotorDistance(0.4, 1500, -1500, 1500, -1500);
+                // signal zone 3 -- go right
+                drivetrain.runMotorDistance(0.4, -600, 600, -600, 600);
                 previous = state;
                 state = -4;
                 break;
