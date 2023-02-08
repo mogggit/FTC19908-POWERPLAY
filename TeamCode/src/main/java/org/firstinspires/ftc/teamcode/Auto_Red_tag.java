@@ -38,7 +38,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "Auto Blue tag")
+@Autonomous(name = "Auto Red tag")
 public class Auto_Red_tag extends LinearOpMode
 {
     // Telemetry
@@ -302,6 +302,8 @@ public class Auto_Red_tag extends LinearOpMode
                 state = -4;
                 break;
             case 21:
+                left.setPosition(0.2);
+                right.setPosition(0.55);
                 slide.setTargetPosition(0);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(0.6);
